@@ -66,6 +66,11 @@ else
           "https://huggingface.co/MonsterMMORPG/tools/resolve/main/antelopev2.zip"
         unzip -o antelopev2.zip -d "$COMFY_INSIGHTFACE/models/" 2>/dev/null
         rm -f antelopev2.zip
+        # 修复 zip 双层嵌套: antelopev2/antelopev2/ → antelopev2/
+        if [ -d "$COMFY_INSIGHTFACE/models/antelopev2/antelopev2" ]; then
+            mv "$COMFY_INSIGHTFACE/models/antelopev2/antelopev2/"* "$COMFY_INSIGHTFACE/models/antelopev2/"
+            rmdir "$COMFY_INSIGHTFACE/models/antelopev2/antelopev2" 2>/dev/null
+        fi
         # 同时保存一份到网络卷
         mkdir -p "$MODELS_DIR/insightface/models/"
         cp -r "$COMFY_INSIGHTFACE/models/antelopev2" "$MODELS_DIR/insightface/models/"
