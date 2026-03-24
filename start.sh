@@ -122,13 +122,38 @@ fi
 
 # ===== 4. pip 依赖 =====
 echo ""
-echo "[4/5] 📦 检查 pip 依赖..."
+echo "[4/6] 📦 检查 pip 依赖..."
 python3 -c "import insightface" 2>/dev/null && echo "  ✅ insightface 已安装" || \
   (echo "  📥 安装 insightface..." && pip install -q insightface onnxruntime-gpu 2>&1 | tail -1 && echo "  ✅ insightface 已安装")
 
+# ===== 5. 去除 ReActor NSFW 限制 =====
+echo ""
+echo "[5/6] 🔓 去除 ReActor NSFW 限制..."
+REACTOR_SFW=""
+for reactor_dir in "$CUSTOM_NODES/ComfyUI-ReActor" "$CUSTOM_NODES/comfyui-reactor"; do
+    if [ -f "$reactor_dir/scripts/reactor_sfw.py" ]; then
+        REACTOR_SFW="$reactor_dir/scripts/reactor_sfw.py"
+        break
+    fi
+done
+
+if [ -n "$REACTOR_SFW" ]; then
+    cat > "$REACTOR_SFW" << 'PATCH_EOF'
+# NSFW filter disabled by pony-i2i start.sh
+def ensure_nsfw_model(nsfwdet_model_path):
+    return False
+
+def nsfw_image(img_data, model_path: str):
+    return False
+PATCH_EOF
+    echo "  ✅ ReActor NSFW 限制已去除: $REACTOR_SFW"
+else
+    echo "  ⚠️ 未找到 ReActor 插件，跳过"
+fi
+
 # ===== 5. 验证 =====
 echo ""
-echo "[5/5] 🔍 验证模型文件..."
+echo "[6/6] 🔍 验证模型文件..."
 echo ""
 
 echo "  === checkpoints ==="
