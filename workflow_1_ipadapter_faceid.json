@@ -84,7 +84,7 @@
         {"name": "INSIGHTFACE", "type": "INSIGHTFACE", "links": [8], "slot_index": 0}
       ],
       "properties": {"Node name for S&R": "IPAdapterInsightFaceLoader"},
-      "widgets_values": ["CUDA"]
+      "widgets_values": ["CUDA", "antelopev2"]
     },
     {
       "id": 12,
@@ -106,7 +106,7 @@
       "id": 13,
       "type": "IPAdapterFaceID",
       "pos": [800, 300],
-      "size": [315, 226],
+      "size": [315, 326],
       "flags": {},
       "order": 6,
       "mode": 0,
@@ -114,13 +114,17 @@
         {"name": "model", "type": "MODEL", "link": 4},
         {"name": "ipadapter", "type": "IPADAPTER", "link": 6},
         {"name": "image", "type": "IMAGE", "link": 7},
+        {"name": "image_negative", "type": "IMAGE", "link": null},
+        {"name": "attn_mask", "type": "MASK", "link": null},
+        {"name": "clip_vision", "type": "CLIP_VISION", "link": null},
         {"name": "insightface", "type": "INSIGHTFACE", "link": 8}
       ],
       "outputs": [
-        {"name": "MODEL", "type": "MODEL", "links": [14], "slot_index": 0}
+        {"name": "MODEL", "type": "MODEL", "links": [14], "slot_index": 0},
+        {"name": "face_image", "type": "IMAGE", "links": null, "slot_index": 1}
       ],
       "properties": {"Node name for S&R": "IPAdapterFaceID"},
-      "widgets_values": [0.85, "linear", 0.0, 1.0, false]
+      "widgets_values": [0.85, 1.0, "linear", "concat", 0.0, 1.0, "V only"]
     },
     {
       "id": 14,
