@@ -1,4 +1,11 @@
-pony_models:
+# 测试 Pod 模式: 模型在 /workspace/models/
+pony_test:
     base_path: /workspace/models
+    checkpoints: checkpoints
+    loras: loras
+
+# Serverless 模式: 模型在 /runpod-volume/pony_models/
+pony_volume:
+    base_path: /runpod-volume/pony_models
     checkpoints: checkpoints
     loras: loras

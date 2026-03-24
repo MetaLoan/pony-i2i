@@ -1,0 +1,24 @@
+# Pony i2i Serverless Worker
+FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+ENV TZ=Asia/Shanghai
+
+WORKDIR /workspace
+
+# Install ComfyUI
+RUN git clone https://github.com/comfyanonymous/ComfyUI.git
+WORKDIR /workspace/ComfyUI
+RUN pip install -r requirements.txt
+RUN pip install runpod websocket-client requests
+
+# Symlink models to network volume
+RUN rm -rf /workspace/ComfyUI/models && \
+    ln -s /runpod-volume/pony_models /workspace/ComfyUI/models
+
+# Copy project files
+COPY extra_model_paths.yaml /workspace/ComfyUI/extra_model_paths.yaml
+COPY pony_i2i_api.json /workspace/pony_i2i_api.json
+COPY runpod_worker_serverless.py /workspace/runpod_worker.py
+
+CMD ["python", "-u", "/workspace/runpod_worker.py"]
