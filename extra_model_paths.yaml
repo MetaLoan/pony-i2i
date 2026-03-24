@@ -1,4 +1,4 @@
 pony_models:
-  base_path: /workspace/models
-  checkpoints: checkpoints
-  loras: loras
+    base_path: /workspace/models
+    checkpoints: checkpoints
+    loras: loras
