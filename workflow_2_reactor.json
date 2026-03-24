@@ -1,0 +1,101 @@
+{
+  "__doc__": "方案2: ReActor — 先t2i生成图片，再用ReActor后处理换脸",
+  "1": {
+    "inputs": {
+      "ckpt_name": "ponyRealism_V23ULTRA.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "2": {
+    "inputs": {
+      "lora_name": "AmateurStyle_v3_PONY_REALISM.safetensors",
+      "strength_model": 0.7,
+      "strength_clip": 0.7,
+      "model": ["1", 0],
+      "clip": ["1", 1]
+    },
+    "class_type": "LoraLoader"
+  },
+  "3": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": ["2", 1]
+    },
+    "class_type": "CLIPSetLastLayer"
+  },
+  "10": {
+    "inputs": {
+      "text": "score_9, score_8_up, score_7_up, photo, film grain, grainy, amateur, 1girl, portrait, upper body, looking at viewer, highly detailed",
+      "clip": ["3", 0]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "11": {
+    "inputs": {
+      "text": "score_4, score_5, score_6, ugly, blurry, low quality, deformed, bad anatomy, worst quality",
+      "clip": ["3", 0]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "20": {
+    "inputs": {
+      "width": 832,
+      "height": 1216,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage"
+  },
+  "21": {
+    "inputs": {
+      "seed": 0,
+      "steps": 30,
+      "cfg": 6.5,
+      "sampler_name": "dpm_2_ancestral",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["2", 0],
+      "positive": ["10", 0],
+      "negative": ["11", 0],
+      "latent_image": ["20", 0]
+    },
+    "class_type": "KSampler"
+  },
+  "22": {
+    "inputs": {
+      "samples": ["21", 0],
+      "vae": ["1", 2]
+    },
+    "class_type": "VAEDecode"
+  },
+  "30": {
+    "inputs": {
+      "image": "face_input.png"
+    },
+    "class_type": "LoadImage"
+  },
+  "40": {
+    "inputs": {
+      "enabled": true,
+      "swap_model": "inswapper_128.onnx",
+      "facedetection": "retinaface_resnet50",
+      "face_restore_model": "none",
+      "face_restore_visibility": 1.0,
+      "codeformer_weight": 0.5,
+      "detect_gender_input": "no",
+      "detect_gender_source": "no",
+      "input_faces_index": "0",
+      "source_faces_index": "0",
+      "console_log_level": 1,
+      "input_image": ["22", 0],
+      "source_image": ["30", 0]
+    },
+    "class_type": "ReActorFaceSwap"
+  },
+  "50": {
+    "inputs": {
+      "filename_prefix": "Pony_ReActor",
+      "images": ["40", 0]
+    },
+    "class_type": "SaveImage"
+  }
+}
