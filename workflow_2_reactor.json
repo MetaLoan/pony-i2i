@@ -1,6 +1,6 @@
 {
-  "last_node_id": 50,
-  "last_link_id": 14,
+  "last_node_id": 60,
+  "last_link_id": 200,
   "nodes": [
     {
       "id": 1,
@@ -137,9 +137,23 @@
         {"name": "vae", "type": "VAE", "link": 11}
       ],
       "outputs": [
-        {"name": "IMAGE", "type": "IMAGE", "links": [12], "slot_index": 0}
+        {"name": "IMAGE", "type": "IMAGE", "links": [12, 200], "slot_index": 0}
       ],
       "properties": {"Node name for S&R": "VAEDecode"}
+    },
+    {
+      "id": 60,
+      "type": "PreviewImage",
+      "pos": [1700, 500],
+      "size": [315, 270],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 200}
+      ],
+      "title": "🔍 中间产物 (换脸前)",
+      "properties": {"Node name for S&R": "PreviewImage"}
     },
     {
       "id": 30,
@@ -204,7 +218,8 @@
     [11, 1, 2, 22, 1, "VAE"],
     [12, 22, 0, 40, 0, "IMAGE"],
     [13, 30, 0, 40, 1, "IMAGE"],
-    [14, 40, 0, 50, 0, "IMAGE"]
+    [14, 40, 0, 50, 0, "IMAGE"],
+    [200, 22, 0, 60, 0, "IMAGE"]
   ],
   "groups": [],
   "config": {},

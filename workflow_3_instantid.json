@@ -1,6 +1,6 @@
 {
-  "last_node_id": 50,
-  "last_link_id": 16,
+  "last_node_id": 60,
+  "last_link_id": 200,
   "nodes": [
     {
       "id": 1,
@@ -221,9 +221,23 @@
         {"name": "vae", "type": "VAE", "link": 15}
       ],
       "outputs": [
-        {"name": "IMAGE", "type": "IMAGE", "links": [102], "slot_index": 0}
+        {"name": "IMAGE", "type": "IMAGE", "links": [102, 200], "slot_index": 0}
       ],
       "properties": {"Node name for S&R": "VAEDecode"}
+    },
+    {
+      "id": 60,
+      "type": "PreviewImage",
+      "pos": [2000, 500],
+      "size": [315, 270],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 200}
+      ],
+      "title": "🔍 中间产物",
+      "properties": {"Node name for S&R": "PreviewImage"}
     },
     {
       "id": 50,
@@ -259,7 +273,8 @@
     [16, 31, 0, 40, 0, "LATENT"],
     [100, 15, 1, 31, 1, "CONDITIONING"],
     [101, 15, 2, 31, 2, "CONDITIONING"],
-    [102, 40, 0, 50, 0, "IMAGE"]
+    [102, 40, 0, 50, 0, "IMAGE"],
+    [200, 40, 0, 60, 0, "IMAGE"]
   ],
   "groups": [],
   "config": {},
