@@ -74,7 +74,7 @@
     },
     {
       "id": 11,
-      "type": "InsightFaceLoader",
+      "type": "IPAdapterInsightFaceLoader",
       "pos": [0, 550],
       "size": [315, 58],
       "flags": {},
@@ -83,7 +83,7 @@
       "outputs": [
         {"name": "INSIGHTFACE", "type": "INSIGHTFACE", "links": [8], "slot_index": 0}
       ],
-      "properties": {"Node name for S&R": "InsightFaceLoader"},
+      "properties": {"Node name for S&R": "IPAdapterInsightFaceLoader"},
       "widgets_values": ["CUDA"]
     },
     {
