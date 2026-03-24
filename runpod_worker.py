@@ -13,8 +13,8 @@ import subprocess
 import threading
 
 COMFY_URL = "127.0.0.1:8188"
-API_JSON_PATH = "/workspace/pony_i2i_api.json"
-COMFY_DIR = "/workspace/ComfyUI"
+API_JSON_PATH = "/workspace/pony-i2i/pony_i2i_api.json"
+COMFY_DIR = "/opt/comfyui-baked"
 OUTPUT_DIR = f"{COMFY_DIR}/output"
 INPUT_DIR = f"{COMFY_DIR}/input"
 
@@ -22,8 +22,8 @@ INPUT_DIR = f"{COMFY_DIR}/input"
 def start_comfyui():
     print("Starting ComfyUI server...", flush=True)
     process = subprocess.Popen(
-        ["python", "-u", "main.py", "--listen", "0.0.0.0", "--port", "8188",
-         "--extra-model-paths-config", "/workspace/extra_model_paths.yaml"],
+        ["python3", "-u", "main.py", "--listen", "0.0.0.0", "--port", "8188",
+         "--extra-model-paths-config", "/workspace/pony-i2i/extra_model_paths.yaml"],
         cwd=COMFY_DIR,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -244,7 +244,6 @@ def process_job(job):
     upload_token = os.environ.get("IMAGE_UPLOAD_TOKEN", "")
 
     for img_path in image_files:
-        # Try upload first
         if upload_url:
             try:
                 with open(img_path, "rb") as f:
@@ -263,7 +262,6 @@ def process_job(job):
             except Exception as e:
                 print(f"Upload error: {e}", flush=True)
 
-        # Always encode as base64 fallback
         with open(img_path, "rb") as f:
             encoded_str = base64.b64encode(f.read()).decode('utf-8')
             encoded_images.append(f"data:image/png;base64,{encoded_str}")
