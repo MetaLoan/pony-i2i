@@ -10,27 +10,36 @@
 #   bash /workspace/pony-i2i/auto_start.sh
 # ==============================================
 
-COMFY_DIR="/opt/comfyui-baked"
+# 自动检测 ComfyUI 安装路径
+COMFY_DIR=""
+for path in /opt/comfyui-baked /workspace/ComfyUI /comfyui /root/ComfyUI /src/ComfyUI; do
+    if [ -f "$path/main.py" ]; then
+        COMFY_DIR="$path"
+        break
+    fi
+done
+
+if [ -z "$COMFY_DIR" ]; then
+    echo "❌ 找不到 ComfyUI 安装目录！请检查 Pod 模板"
+    echo "   已检查: /opt/comfyui-baked /workspace/ComfyUI /comfyui /root/ComfyUI /src/ComfyUI"
+    exit 1
+fi
+
+echo "📍 ComfyUI 路径: $COMFY_DIR"
 CUSTOM_NODES="$COMFY_DIR/custom_nodes"
 
 echo "=============================================="
-echo "🚀 Pony i2i 启动"
+echo "🚀 Pony i2i 环境配置"
 echo "=============================================="
 
-# ===== 0. 杀掉已有的 ComfyUI 进程 =====
-echo "[0/4] 清理已有进程..."
-pkill -f "main.py" 2>/dev/null
-fuser -k 8188/tcp 2>/dev/null
-sleep 2
-echo "  ✅ 端口 8188 已释放"
-
 # ===== 1. 复制 extra_model_paths.yaml =====
-echo "[1/4] 配置模型路径..."
+echo "[1/3] 📋 复制模型路径配置文件..."
 cp /workspace/pony-i2i/extra_model_paths.yaml $COMFY_DIR/extra_model_paths.yaml
-echo "  ✅ ComfyUI 将自动扫描 /workspace/models/"
+echo "  ✅ 已将 extra_model_paths.yaml 复制到 $COMFY_DIR/"
+echo "  ✅ ComfyUI 启动时将自动扫描 /workspace/models/ 下的所有模型"
 
 # ===== 2. 安装自定义节点 =====
-echo "[2/4] 安装自定义节点..."
+echo "[2/3] 安装自定义节点..."
 
 [ -d "$CUSTOM_NODES/ComfyUI_IPAdapter_plus" ] || \
   (cd $CUSTOM_NODES && git clone --depth 1 -q https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && echo "  ✅ IPAdapter Plus 已安装")
@@ -43,13 +52,10 @@ echo "[2/4] 安装自定义节点..."
   (cd $CUSTOM_NODES && git clone --depth 1 -q https://github.com/cubiq/ComfyUI_InstantID.git && echo "  ✅ InstantID 已安装")
 
 # ===== 3. pip 依赖 =====
-echo "[3/4] 检查 pip 依赖..."
+echo "[3/3] 检查 pip 依赖..."
 python3 -c "import insightface" 2>/dev/null || \
   (echo "  安装 insightface..." && pip install -q insightface onnxruntime-gpu 2>&1 | tail -1)
 
-# ===== 4. 启动 ComfyUI =====
-echo "[4/4] 启动 ComfyUI..."
 echo "=============================================="
-
-cd $COMFY_DIR
-exec python3 main.py --listen 0.0.0.0 --port 8188
+echo "✅ 配置完毕！请手动重启 ComfyUI 使配置生效"
+echo "=============================================="
