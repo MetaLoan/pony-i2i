@@ -17,6 +17,13 @@ echo "=============================================="
 echo "🚀 Pony i2i 启动"
 echo "=============================================="
 
+# ===== 0. 杀掉已有的 ComfyUI 进程 =====
+echo "[0/4] 清理已有进程..."
+pkill -f "main.py" 2>/dev/null
+fuser -k 8188/tcp 2>/dev/null
+sleep 2
+echo "  ✅ 端口 8188 已释放"
+
 # ===== 1. 复制 extra_model_paths.yaml =====
 echo "[1/4] 配置模型路径..."
 cp /workspace/pony-i2i/extra_model_paths.yaml $COMFY_DIR/extra_model_paths.yaml
