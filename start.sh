@@ -129,16 +129,10 @@ python3 -c "import insightface" 2>/dev/null && echo "  ✅ insightface 已安装
 # ===== 5. 去除 ReActor NSFW 限制 =====
 echo ""
 echo "[5/6] 🔓 去除 ReActor NSFW 限制..."
-REACTOR_SFW=""
+PATCHED=0
 for reactor_dir in "$CUSTOM_NODES/ComfyUI-ReActor" "$CUSTOM_NODES/comfyui-reactor"; do
     if [ -f "$reactor_dir/scripts/reactor_sfw.py" ]; then
-        REACTOR_SFW="$reactor_dir/scripts/reactor_sfw.py"
-        break
-    fi
-done
-
-if [ -n "$REACTOR_SFW" ]; then
-    cat > "$REACTOR_SFW" << 'PATCH_EOF'
+        cat > "$reactor_dir/scripts/reactor_sfw.py" << 'PATCH_EOF'
 # NSFW filter disabled by pony-i2i start.sh
 def ensure_nsfw_model(nsfwdet_model_path):
     return False
@@ -146,8 +140,12 @@ def ensure_nsfw_model(nsfwdet_model_path):
 def nsfw_image(img_data, model_path: str):
     return False
 PATCH_EOF
-    echo "  ✅ ReActor NSFW 限制已去除: $REACTOR_SFW"
-else
+        echo "  ✅ 已 patch: $reactor_dir/scripts/reactor_sfw.py"
+        PATCHED=$((PATCHED + 1))
+    fi
+done
+
+if [ "$PATCHED" -eq 0 ]; then
     echo "  ⚠️ 未找到 ReActor 插件，跳过"
 fi
 
