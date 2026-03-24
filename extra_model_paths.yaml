@@ -1,11 +1,12 @@
-# 测试 Pod 模式: 模型在 /workspace/models/
-pony_test:
+# ComfyUI 自动扫描这个文件
+# 所有模型都在 /workspace/models/ (网络卷, 永久持久化)
+# 不需要软链接!
+
+pony_workspace:
     base_path: /workspace/models
     checkpoints: checkpoints
     loras: loras
-
-# Serverless 模式: 模型在 /runpod-volume/pony_models/
-pony_volume:
-    base_path: /runpod-volume/pony_models
-    checkpoints: checkpoints
-    loras: loras
+    ipadapter: ipadapter
+    insightface: insightface
+    instantid: instantid
+    controlnet: controlnet
