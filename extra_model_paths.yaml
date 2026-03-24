@@ -6,6 +6,7 @@ pony_workspace:
     base_path: /workspace/models
     checkpoints: checkpoints
     loras: loras
+    clip_vision: clip_vision
     ipadapter: ipadapter
     insightface: insightface
     instantid: instantid

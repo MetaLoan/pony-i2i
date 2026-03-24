@@ -1,6 +1,6 @@
 {
-  "last_node_id": 60,
-  "last_link_id": 200,
+  "last_node_id": 61,
+  "last_link_id": 201,
   "nodes": [
     {
       "id": 1,
@@ -87,6 +87,20 @@
       "widgets_values": ["CUDA", "antelopev2"]
     },
     {
+      "id": 61,
+      "type": "CLIPVisionLoader",
+      "pos": [0, 680],
+      "size": [315, 58],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "outputs": [
+        {"name": "CLIP_VISION", "type": "CLIP_VISION", "links": [201], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "CLIPVisionLoader"},
+      "widgets_values": ["CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"]
+    },
+    {
       "id": 12,
       "type": "LoadImage",
       "pos": [0, 700],
@@ -116,7 +130,7 @@
         {"name": "image", "type": "IMAGE", "link": 7},
         {"name": "image_negative", "type": "IMAGE", "link": null},
         {"name": "attn_mask", "type": "MASK", "link": null},
-        {"name": "clip_vision", "type": "CLIP_VISION", "link": null},
+        {"name": "clip_vision", "type": "CLIP_VISION", "link": 201},
         {"name": "insightface", "type": "INSIGHTFACE", "link": 8}
       ],
       "outputs": [
@@ -278,7 +292,8 @@
     [16, 3, 1, 14, 0, "CLIP"],
     [100, 31, 0, 40, 0, "LATENT"],
     [101, 40, 0, 50, 0, "IMAGE"],
-    [200, 40, 0, 60, 0, "IMAGE"]
+    [200, 40, 0, 60, 0, "IMAGE"],
+    [201, 61, 0, 13, 5, "CLIP_VISION"]
   ],
   "groups": [],
   "config": {},
