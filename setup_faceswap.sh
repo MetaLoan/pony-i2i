@@ -24,21 +24,21 @@ else
   echo "  ✅ ComfyUI_IPAdapter_plus 已存在"
 fi
 
-# ReActor (换脸)
-if [ ! -d "$CUSTOM_NODES/comfyui-reactor-node" ]; then
-  echo "  安装 comfyui-reactor-node..."
+# ReActor (换脸) - 使用 Gourieff 官方仓库
+if [ ! -d "$CUSTOM_NODES/comfyui-reactor-node" ] && [ ! -d "$CUSTOM_NODES/ComfyUI-ReActor" ]; then
+  echo "  安装 ComfyUI-ReActor..."
   cd $CUSTOM_NODES
-  git clone https://github.com/Gourieff/comfyui-reactor-node.git
-  cd comfyui-reactor-node
+  git clone https://github.com/Gourieff/ComfyUI-ReActor.git
+  cd ComfyUI-ReActor
   pip install -r requirements.txt 2>/dev/null
   pip install insightface onnxruntime-gpu 2>/dev/null
 else
-  echo "  ✅ comfyui-reactor-node 已存在"
+  echo "  ✅ ReActor 已存在"
 fi
 
 # InstantID
-if [ ! -d "$CUSTOM_NODES/ComfyUI-InstantID" ]; then
-  echo "  安装 ComfyUI-InstantID..."
+if [ ! -d "$CUSTOM_NODES/ComfyUI_InstantID" ] && [ ! -d "$CUSTOM_NODES/ComfyUI-InstantID" ]; then
+  echo "  安装 ComfyUI_InstantID..."
   cd $CUSTOM_NODES
   git clone https://github.com/cubiq/ComfyUI_InstantID.git
 else
