@@ -12,7 +12,7 @@
 
 # 自动检测 ComfyUI 安装路径
 COMFY_DIR=""
-for path in /opt/comfyui-baked /workspace/ComfyUI /comfyui /root/ComfyUI /src/ComfyUI; do
+for path in /workspace/runpod-slim/ComfyUI /opt/comfyui-baked /workspace/ComfyUI /comfyui /root/ComfyUI /src/ComfyUI; do
     if [ -f "$path/main.py" ]; then
         COMFY_DIR="$path"
         break
